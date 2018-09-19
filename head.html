@@ -1,0 +1,1341 @@
+<meta charset="UTF-8">
+<meta name="description" content="The websites currently read and written by the world's top planners.">
+<meta name="keywords" content="urbanism, urban planning, cycling, city, transit, transportation">
+<meta name="author" content="Kyle Zheng">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title"  content="The 257 Master City" />
+<meta property="og:image"  content="http://www.twofiveseven.org/wp-content/uploads/2016/12/New-York.jpg" />
+<meta property="og:description"  content="The websites currently read and written by the world's top planners." />
+<meta property="og:type"  content="page" />
+
+<meta name="twitter:card" content:"summary" />
+<meta name="twitter:title" content:"The 257 Master City" />
+<meta name="twitter:description" content:"The websites currently read and written by the world's top planners." />
+<meta name="twitter:image" content:"http://www.twofiveseven.org/wp-content/uploads/2016/12/New-York.jpg" />
+
+
+<title> The 257 Master City </title>
+
+
+<script type="text/javascript" async="" src="https://ssl.google-analytics.com/ga.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+<script>
+
+$(document).ready(function(){
+document.getElementsByClassName('loading')[0].style.visibility = "hidden";
+
+document.getElementsByClassName('loading')[0].style.visibility = "visible";
+
+    setTimeout(function(){ 
+document.getElementById('changeloading').innerHTML = "LOADING... 1";     }, 6000);
+setTimeout(function(){ 
+document.getElementById('changeloading').innerHTML = "LOADING... 2";     }, 5000);
+setTimeout(function(){ 
+document.getElementById('changeloading').innerHTML = "LOADING... 3";     }, 4000);
+setTimeout(function(){ 
+document.getElementById('changeloading').innerHTML = "LOADING... 4";     }, 3000);
+setTimeout(function(){ 
+document.getElementById('changeloading').innerHTML = "LOADING... 5";     }, 2000); 
+   setTimeout(function(){ 
+document.getElementsByClassName('loading')[0].style.visibility = "hidden";
+    }, 8000);
+
+
+});
+
+function strip(html)
+{
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent || tmp.innerText || "";
+}
+
+// This function gets the favourites and prints them out
+function printFavourites(){
+$(".favourites").html(""); 
+
+//First, get all cookies favourites
+var fav_array = getFavourites(); 
+if(!fav_array) {
+$(".favourites").html("Add your favorite blogs by clicking the <img src='http://www.newsgd.com/public/2015/img/favorite.png'>!");
+return; }
+fav_array = JSON.parse(fav_array);  
+
+//First Search all General Blogs
+
+      var xmlhttp;
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var response = this.responseText;
+          data = JSON.parse(response);
+
+
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var cityresponse = this.responseText;
+          citydata = JSON.parse(cityresponse);
+
+
+lengthfavs=fav_array.length; 
+for(var m = 0; m < lengthfavs; m++){
+var found = false; 
+          length = data.length; 
+          for (var i = 0; !found && i < data.length; i++) {
+
+            categorylength = data[i].blogs.length; 
+            for (var j = 0; !found && j < categorylength; j++) {
+
+
+              if (data[i].blogs[j].url == fav_array[m]) {
+                found = true; 
+              }
+
+              if (found){
+
+                var pasteHtml = "<div class='col1'> <span class='favouritesIcon' hidden>" + fav_array[m] + "</span> <span class='link' onclick='popup(\"" + data[i].blogs[j].rss + "\", \"" + data[i].blogs[j].url + "\")'>" + data[i].blogs[j].name + "</span> </div><div class='col3'> <a href='" + data[i].blogs[j].url + "' target='_blank'> <img src='http://www.planet-9.com/autolinker/images/link2.gif'> </a> </div><div class='col2'><span class='favouritesLastPost' hidden>" + data[i].blogs[j].rss + "</span> </div>"
+                $(".favourites").append(pasteHtml); 
+              }
+
+            }
+          }
+
+//If still not found, search cities blogs
+if(!found){
+
+
+var found = false; 
+          length = citydata.length; 
+          for (var i = 0; !found && i < citydata.length; i++) {
+
+            categorylength = citydata[i].blogs.length; 
+            for (var j = 0; !found && j < categorylength; j++) {
+
+
+              if (citydata[i].blogs[j].url == fav_array[m]) {
+                found = true; 
+              }
+
+              if (found){
+
+                var pasteHtml = "<div class='col1'> <span class='favouritesIcon' hidden>" + fav_array[m] + "</span> <span class='link' onclick='popup(\"" + citydata[i].blogs[j].rss + "\", \"" + citydata[i].blogs[j].url + "\")'>" + citydata[i].blogs[j].name + "</span> </div><div class='col3'> <a href='" + citydata[i].blogs[j].url + "' target='_blank'> <img src='http://www.planet-9.com/autolinker/images/link2.gif'> </a> </div><div class='col2'><span class='favouritesLastPost' hidden>" + citydata[i].blogs[j].rss + "</span> </div>"
+                $(".favourites").append(pasteHtml); 
+              }
+
+            }
+          
+}
+       
+
+
+///
+
+}
+}
+         makeFavouritesIcon(); 
+          var col2 = document.getElementsByClassName('favouritesLastPost');
+
+          for ( var i=0; i < col2.length; i++ ) {
+            var url = col2[i].textContent; 
+            var htmlText; 
+
+            doAjax(url, col2[i], function(htmlText, col2){
+              $(col2).show();
+              col2.textContent = htmlText; 
+            });
+          }
+
+        }
+
+      };
+      xmlhttp.open("GET", "../cities.json", true);
+      xmlhttp.send();
+
+ }
+
+      };
+      xmlhttp.open("GET", "../blogs.json", true);
+      xmlhttp.send();
+
+}
+
+
+///
+
+var doTimeout; 
+
+function getSearch(){
+
+document.getElementById("search-results").style.height="80px";
+document.getElementById("search-results").style.padding="10px 0 0";
+    var text = document.getElementById("fname");
+
+    if(text.value.length <4) return;
+clearTimeout(doTimeout); 
+doTimeout = setTimeout(function(){
+   
+var text = document.getElementById("fname");
+if(text.value.length <4) return;
+    $(".search-results").html(""); 
+
+//First Search all General Blogs
+
+      var xmlhttp;
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+          var response = this.responseText;
+          data = JSON.parse(response);
+
+          length = data.length; 
+          for ( var i=0; i < length; i++) {
+
+            categorylength = data[i].blogs.length; 
+            for ( var j=0; j < categorylength; j++) {
+
+              var found = false; 
+
+              if (data[i].blogs[j].name.search(new RegExp(text.value, "i")) != -1) {
+                found = true; 
+              }       else if (data[i].blogs[j].url.search(new RegExp(text.value, "i")) != -1) {
+                found = true; 
+              }
+
+              if (found){
+
+                var pasteHtml = "<div class='col1'> <span class='searchIcon' hidden>" + data[i].blogs[j].url + "</span> <span class='link' onclick='popup(\"" + data[i].blogs[j].rss + "\", \"" + data[i].blogs[j].url + "\")'>" + data[i].blogs[j].name + "</span> </div><div class='col3'> <a href='" + data[i].blogs[j].url + "' target='_blank'> <img src='http://www.planet-9.com/autolinker/images/link2.gif'> </a> </div><div class='col2'><span class='searchLastPost' hidden>" + data[i].blogs[j].rss + "</span> </div>"
+                $(".search-results").append(pasteHtml); 
+              }
+
+            }
+          }
+//Now Search each City
+
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+          var response = this.responseText;
+          data = JSON.parse(response);
+
+          length = data.length; 
+          for ( var i=0; i < length; i++) {
+
+            categorylength = data[i].blogs.length; 
+            for ( var j=0; j < categorylength; j++) {
+
+              var found = false; 
+
+              if (data[i].blogs[j].name.search(new RegExp(text.value, "i")) != -1) {
+                found = true; 
+              }       else if (data[i].blogs[j].url.search(new RegExp(text.value, "i")) != -1) {
+                found = true; 
+              }
+
+              if (found){
+
+                var pasteHtml = "<div class='col1'> <span class='searchIcon' hidden>" + data[i].blogs[j].url + "</span> <span class='link' onclick='popup(\"" + data[i].blogs[j].rss + "\", \"" + data[i].blogs[j].url + "\")'>" + data[i].blogs[j].name + "</span> </div><div class='col3'> <a href='" + data[i].blogs[j].url + "' target='_blank'> <img src='http://www.planet-9.com/autolinker/images/link2.gif'> </a> </div><div class='col2'><span class='searchLastPost' hidden>" + data[i].blogs[j].rss + "</span> </div>"
+                $(".search-results").append(pasteHtml); 
+              }
+
+            }
+          }
+
+         makeSearchIcon(); 
+          var col2 = document.getElementsByClassName('searchLastPost');
+
+          for ( var i=0; i < col2.length; i++ ) {
+            var url = col2[i].textContent; 
+            var htmlText; 
+
+            doAjax(url, col2[i], function(htmlText, col2){
+              $(col2).show();
+              col2.textContent = htmlText; 
+            });
+          }
+
+        }
+      };
+      xmlhttp.open("GET", "../cities.json", true);
+      xmlhttp.send();
+
+        }
+      };
+      xmlhttp.open("GET", "../blogs.json", true);
+      xmlhttp.send();
+    
+}, 500);
+
+  }
+
+
+$(document).ready(function(){
+        printFavourites();
+        var elements = document.getElementsByClassName('category-wrapper');
+        
+        for ( var i=0; i < elements.length; i++) {
+          var category = new Array; 
+          category[i] = elements[i].textContent;
+
+          loadBlogs(category[i]-1, elements[i], function(pasteHtml, element){
+
+                 element.innerHTML = pasteHtml;
+                 
+                 printIcon(element); 
+                  var col2 = element.getElementsByClassName('lastPost');
+
+                  for ( var i=0; i < col2.length; i++){
+                  var url = col2[i].textContent; 
+                  var htmlText; 
+
+                  doAjax(url, col2[i], function(htmlText, col2){
+                      $(col2).show();
+                      col2.textContent = htmlText; 
+                  }); 
+                  }
+          }); 
+        
+	}
+loadUpdates();
+   $("#add").html("<form action='http://twofiveseven.org/addsite' target='_blank'><input type='submit' value='Don’t see a site? Click here to add it.'></form>");
+});
+
+
+function loadBlogs(cat, element, callBack) {
+var data; 
+var pasteHtml = ""; 
+var length;
+var sitename;
+var rss;
+var homepage; 
+var xmlhttp;
+    xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+		var response = this.responseText;
+		data = JSON.parse(response);
+
+      	length = data[cat].blogs.length; 
+        for (var i = 0; i < length; i++){
+
+           homepage = data[cat].blogs[i].url;
+           rss = data[cat].blogs[i].rss; 
+           sitename = data[cat].blogs[i].name; 
+
+pasteHtml += "<div class='col1'> <span class='siteIcon' hidden>" + homepage + "</span> <span class='link' onclick='popup(\"" + rss + "\", \"" + homepage + "\")'>" + sitename + "</span> </div><div class='col3'> <a href='" + homepage + "' target='_blank'> <img src='http://www.planet-9.com/autolinker/images/link2.gif'> </a> </div><div class='col2'><span class='lastPost' hidden>" + rss + "</span> </div>"; 
+
+
+        }
+      	return callBack(pasteHtml, element); 
+    }
+  };
+  xmlhttp.open("GET", "../blogs.json", true);
+  xmlhttp.send();
+}
+
+function loadUpdates() {
+var text; 
+var xmlhttp;
+  if (window.XMLHttpRequest) {
+    xmlhttp = new XMLHttpRequest();
+  } else {
+    // code for older browsers
+    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+		var text = this.responseText;
+
+
+   $("#update").html(text); 
+
+    }
+  };
+  xmlhttp.open("GET", "../updates.json", true);
+  xmlhttp.send();
+}
+
+
+
+function setCookie(cname,cvalue,exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+$(document).ready(function() {
+  
+var count=getCookie("count");
+    if (count == "") {
+        count=1; 
+    } else{
+count++; 
+}
+       
+           setCookie("count", count, 365);     
+if (count > 20){
+   $("#cookie").html("You have visited this page " + count + " times. <a href='http://www.twofiveseven.org/donate/' target='_blank' style='text-decoration:underline'>If you would like to donate, you can help cover the $160 yearly cost of web hosting."); 
+}
+else if(count > 2){
+   $("#cookie").html("You have visited this page " + count + " times."); 
+}
+
+});
+
+$(document).ready(function(){
+$(".ui-corner-all").html(" "); 
+
+});
+
+$(document).ready(function(){
+$("#header-middle").html("<a id='logo' href='http://www.twofiveseven.org/' title='257' target='_blank' class='ui-link'><img src='http://twofiveseven.org/wp-content/uploads/2017/01/257-title-e1484684119782.png'></a>"); 
+
+});
+
+function doAjax(url, col2, callBack){
+if (!url){
+return callBack("", col2); 
+}
+ $.ajax({
+        	type: "GET", 
+  			url: "https://query.yahooapis.com/v1/public/yql?q=select%20pubDate%20from%20feed%20where%20url%3D'" + encodeURI(url) + "'&format=json&callback=",
+        	dataType: 'json',
+        	error: function(){
+            	return callBack(" ", col2); 
+        	},
+        	success: function (data) {           
+            	var htmlText; 
+if(data.query.results){
+
+var date = data.query.results.item[0].pubDate; 
+
+}else {
+ doAtom(url, col2, function(date, col2){
+          
+              parseDate(date, col2, function(htmlText, col2){
+                    return callBack( htmlText, col2);
+                     });
+
+}); 
+ 
+}
+
+if(!date){
+return callBack(" ", col2); 
+}
+                
+                    parseDate(date, col2, function(htmlText, col2){
+                    return callBack( htmlText, col2);
+                     });
+	        }
+    });
+}
+
+function doAtom(url, col2, callBack){
+ $.ajax({
+        	type: "GET", 
+  			url: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20feed%20where%20url%3D'" + encodeURI(url) + "'&format=json&callback=",
+        	dataType: 'json',
+        	error: function(){
+            	return null; 
+        	},
+        	success: function (data) {           
+
+if(data.query.results.entry){
+var date= data.query.results.entry[0].published; 
+}
+if(!date){
+date = data.query.results.item[0].date;
+}
+return callBack(date, col2); 
+}
+});
+}
+
+function parseDate(date, col2, callBack){
+var today = new Date();
+
+
+                var miltoday = Date.parse(today);
+                var milpost = Date.parse(date);
+                var diff = miltoday-milpost; 
+
+                var hdiff = diff/1000/60/60;
+                if (hdiff > 8760) {htmlText= ">1 year"; }
+                
+                else if (hdiff < 1) {
+                	var minutes = Math.ceil(hdiff*60);
+                    if (minutes == 1) {htmlText= "1 min";}
+                    else {htmlText= minutes + " mins";}
+                }
+                
+                else if (hdiff < 24) {
+                	var roundhdiff = Math.floor(hdiff); 
+                    if (roundhdiff == 1) {htmlText= "1 hour";}
+                    else {htmlText= roundhdiff + " hours";}
+                }
+else if (hdiff > 720) {
+                	var months = Math.floor(hdiff/720); 
+                    if (months == 1) {htmlText= "1 month";}
+                    else {htmlText= months + " months";}
+                }
+                else {var ddiff = hdiff/24; 
+                    var roundddiff = Math.floor(ddiff);
+                    if (roundddiff == 1) {htmlText = "1 day";}
+                    else {htmlText= roundddiff + " days"; }}
+
+return callBack(htmlText, col2); 
+}
+</script>
+
+
+<script>
+ function printIcon(category){   	
+ var elements = category.getElementsByClassName('siteIcon');
+        $(elements).show();
+        for ( var i=0; i < elements.length; i++) {
+             
+        var url = elements[i].textContent; 
+        
+        var iconLink= "https://www.google.com/s2/favicons?domain=" + url; 
+        var iconHtml = "<img src='" + iconLink + "'>"; 
+        elements[i].innerHTML = iconHtml; 
+        }
+}
+
+function makeIcon() {
+var elements = document.getElementsByClassName('cityblogsIcon');
+        $(elements).show();
+        for ( var i=0; i < elements.length; i++) {
+             
+        var url = elements[i].textContent; 
+        
+        var iconLink= "https://www.google.com/s2/favicons?domain=" + url; 
+        var iconHtml = "<img src='" + iconLink + "'>"; 
+        elements[i].innerHTML = iconHtml; 
+        }
+}
+
+function makeSearchIcon() {
+var elements = document.getElementsByClassName('searchIcon');
+        $(elements).show();
+        for ( var i=0; i < elements.length; i++) {
+             
+        var url = elements[i].textContent; 
+        
+        var iconLink= "https://www.google.com/s2/favicons?domain=" + url; 
+        var iconHtml = "<img src='" + iconLink + "'>"; 
+        elements[i].innerHTML = iconHtml; 
+        }
+}
+
+function makeFavouritesIcon() {
+var f_elements = document.getElementsByClassName('favouritesIcon');
+        $(f_elements).show();
+        for ( var i=0; i < f_elements.length; i++) {
+             
+        var url = f_elements[i].textContent; 
+        
+        var iconLink= "https://www.google.com/s2/favicons?domain=" + url; 
+        var iconHtml = "<img src='" + iconLink + "'>"; 
+        f_elements[i].innerHTML = iconHtml; 
+        }
+}
+
+
+function isFavourite(url){
+var fav_array = getFavourites(); 
+
+inFav = false; 
+if(!fav_array) return false; 
+fav_array = JSON.parse(fav_array);  
+
+lengthfavs=fav_array.length; 
+for(var i = 0; i < lengthfavs; i++){
+if(url == fav_array[i]){
+return true; }
+}
+return false; 
+}
+
+function getFavourites() {
+    var name = "favourites=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function dofavourite(url){
+ $(".favimg").html("<img src='http://www.bubhub.com.au/community/forums/images/icons/vbactivity/achievements/achievement_amber.png' onclick='removefavourite(\"" + url + "\")'>"); 
+
+var fav_array = getFavourites(); 
+
+if(!fav_array){
+fav_array= JSON.parse("[]"); 
+fav_array.push(url); 
+}
+else{
+fav_array = JSON.parse(fav_array);  
+fav_array.unshift(url); 
+}
+
+console.log(fav_array); 
+
+//Make a cookie
+
+    var d = new Date();
+    d.setTime(d.getTime() + (2000*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = "favourites=" + JSON.stringify(fav_array) + ";" + expires + ";path=/";
+
+}
+
+function removefavourite(url){
+ $(".favimg").html("<img src='http://www.myjob.mu/img/icons/star-white-small.png' onclick='dofavourite(\"" + url + "\")'>"); 
+
+var fav_array = getFavourites(); 
+
+fav_array = JSON.parse(fav_array);  
+
+lengthfavs=fav_array.length; 
+for(var i = 0; i < lengthfavs; i++){
+if(url == fav_array[i]){
+fav_array.splice( i, 1); }
+}
+
+console.log(fav_array); 
+
+//Make a cookie
+
+    var d = new Date();
+    d.setTime(d.getTime() + (2000*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = "favourites=" + JSON.stringify(fav_array) + ";" + expires + ";path=/";
+
+
+
+}
+
+function popup(rss, url){
+      $("#ptitle").html("Loading...");
+      $("#pdescription").html(".");
+      $("#purl").html(".");
+      $("#platest").html("Latest Posts - 1"); 
+      $("#ptitle1").html("<div align='center'><img src='https://www.reaconverter.com/purchase/s_loading.gif'></div>");
+      $("#ptitle2").html("");
+      $("#ptitle3").html("");
+      $("#pdescrip1").html("");
+      $("#pdescrip2").html("");
+      $("#pdescrip3").html("");
+      $("#nextpage").html(""); 
+    
+    var popup = document.getElementById('myPopup');
+	document.getElementsByClassName('swipePopup')[0].style.visibility = "hidden";
+  	popup.classList.remove('hide'); 
+    popup.classList.remove('show'); 
+	popup.classList.add('show'); 
+    getRss(rss, url, 0, function(url, title, descrip, title1, descrip1, title2, descrip2, title3, descrip3, link1, link2, link3){
+    		
+            if (!title && !descrip1){
+            titleHtml = "<a href='" + url + "' target='_blank'> No Feed</a>";
+            post1Html = "<a href='" + url + "'target='_blank'> Go to site </a>";
+            var urlHtml = "<a href='" + url + "' target='_blank'>" + url + "</a>"; 
+            var descrip = post2Html = post3Html =descrip1=descrip2=descrip3= nextPage = " "; 
+
+            }else{
+
+            var starUrl = "<img src='http://www.myjob.mu/img/icons/star-white-small.png' onclick='dofavourite(\"" + url + "\")'></span>"; 
+if (isFavourite(url)) {starUrl = "<img src='http://www.bubhub.com.au/community/forums/images/icons/vbactivity/achievements/achievement_amber.png' onclick='removefavourite(\"" + url + "\")'></span>"; }
+
+
+            var titleHtml = "<a href='" + url + "' target='_blank'>" + title + "</a>";
+            var urlHtml = "<span class='favimg' align='left'> " + starUrl + "  <a href='" + url + "' target='_blank'>" + url + "</a>"; 
+            var post1Html = "<a href='" + link1 + "' target='_blank'>" + title1 + "</a>";            
+            var post2Html = "<a href='" + link2 + "' target='_blank'>" + title2 + "</a>";
+            var post3Html = "<a href='" + link3 + "' target='_blank'>" + title3 + "</a>";
+			var nextPage = "<p id='nextpage' onclick='nextPage(\"" + rss + "\")'>Next Page >></p>";
+            }
+            $("#platest").html("Latest Posts - 1"); 
+            $("#ptitle").html(titleHtml);
+            $("#pdescription").html(descrip);
+            $("#purl").html(urlHtml);
+            $("#ptitle1").html(post1Html);
+            $("#ptitle2").html(post2Html);
+            $("#ptitle3").html(post3Html);
+            $("#pdescrip1").html(descrip1);
+            $("#pdescrip2").html(descrip2);
+            $("#pdescrip3").html(descrip3);
+            $("#nextpage").html(nextPage); 
+            
+    });
+}
+
+function nextPage(rss){
+	getRss(rss, rss, 3, function(url, title, descrip, title1, descrip1, title2, descrip2, title3, descrip3, link1, link2, link3){
+    	var post1Html = "<a href='" + link1 + "' target='_blank'>" + title1 + "</a>";            
+        var post2Html = "<a href='" + link2 + "' target='_blank'>" + title2 + "</a>";
+        var post3Html = "<a href='" + link3 + "' target='_blank'>" + title3 + "</a>";
+		var nextPage = "<p id='nextpage' onclick='nextPage2(\"" + rss + "\")'>Next Page >></p>";
+        
+        $("#platest").html("Latest Posts - 2"); 
+        $("#ptitle1").html(post1Html);
+      $("#ptitle2").html(post2Html);
+      $("#ptitle3").html(post3Html);
+      $("#pdescrip1").html(descrip1);
+      $("#pdescrip2").html(descrip2);
+      $("#pdescrip3").html(descrip3);
+      $("#nextpage").html(nextPage); 
+    }); 
+}
+
+function nextPage2(rss){
+	getRss(rss, rss, 6, function(url, title, descrip, title1, descrip1, title2, descrip2, title3, descrip3, link1, link2, link3){
+    	var post1Html = "<a href='" + link1 + "' target='_blank'>" + title1 + "</a>";            
+        var post2Html = "<a href='" + link2 + "' target='_blank'>" + title2 + "</a>";
+        var post3Html = "<a href='" + link3 + "' target='_blank'>" + title3 + "</a>";
+		var nextPage = "";
+        
+
+        $("#platest").html("Latest Posts - 3"); 
+        $("#ptitle1").html(post1Html);
+      $("#ptitle2").html(post2Html);
+      $("#ptitle3").html(post3Html);
+      $("#pdescrip1").html(descrip1);
+      $("#pdescrip2").html(descrip2);
+      $("#pdescrip3").html(descrip3);
+      $("#nextpage").html(nextPage); 
+    }); 
+}
+
+$(document).ready(function(){
+  $(".popuptext").on("swiperight",function(){
+    popupClose(true);
+  });                       
+});
+
+var isMobile = false; 
+
+function popupClose(close){
+
+if (close){
+                var popup = document.getElementById('myPopup');
+        popup.classList.add('hide');
+
+ }
+else if(!isMobile){
+   if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+       document.getElementsByClassName('swipePopup')[0].style.visibility = "visible";
+       isMobile=true; 
+   }
+   else{
+        var popup = document.getElementById('myPopup');
+        popup.classList.add('hide');
+    }
+}
+else{
+        var popup = document.getElementById('myPopup');
+        popup.classList.add('hide');
+    }
+
+}
+
+$(document).ready(function(){
+ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+document.getElementById("close").src="http://instaprints.com/images/HomePageSlideshowArrowRight.gif";
+}
+
+
+});
+
+function getRss(rss, url, num, callBack){
+if (!rss){
+return callBack(url); 
+}
+$.ajax({
+        	type: "GET", 
+  			url: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%20%3D%20'" + rss + "'&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=",
+        	dataType: 'json',        	
+error: function(){
+
+return callBack(url);
+
+},
+success: function (data) {            	
+console.log(data);
+var title, descrip, title1, descrip1,title2, descrip2,title3, descrip3,link1, link2, link3;
+if (!data.query.results){
+return callBack(url); 
+}
+if (!data.query.results.rss){
+	 title = data.query.results.feed.title; 
+      if(title.content){
+        title=title.content;}
+      descrip = data.query.results.feed.subtitle; 
+      if(descrip) {  if(descrip.content){            descrip=descrip.content;  }      }else{descrip=".";}
+
+      if(data.query.results.feed.entry[0+num].title.content){ 
+        title1 = data.query.results.feed.entry[0+num].title.content;
+        title2 =data.query.results.feed.entry[1+num].title.content;
+        title3 =data.query.results.feed.entry[2+num].title.content;
+      }
+      else{
+        title1 = data.query.results.feed.entry[0+num].title;
+        title2 =data.query.results.feed.entry[1+num].title;
+        title3 =data.query.results.feed.entry[2+num].title;
+               }
+
+      if(data.query.results.feed.entry[0+num].content){ 
+      descrip1 = data.query.results.feed.entry[0+num].content.content; 
+                      descrip2 =data.query.results.feed.entry[1+num].content.content;
+                      descrip3 = data.query.results.feed.entry[2+num].content.content; 
+      }else if (data.query.results.feed.entry[0+num].summary){
+      descrip1 = data.query.results.feed.entry[0+num].summary.content; 
+                descrip2 =data.query.results.feed.entry[1+num].summary.content;
+                descrip3 = data.query.results.feed.entry[2+num].summary.content; 
+
+	}
+        else {
+       descrip1 = descrip2 = descrip3 = "";
+        }  
+                link1 =data.query.results.feed.entry[0+num].link.href;
+                link2 = data.query.results.feed.entry[1+num].link.href;
+                link3 = data.query.results.feed.entry[2+num].link.href;
+
+    if(!link1){
+    link1 = data.query.results.feed.entry[0+num].origLink;
+    link2 = data.query.results.feed.entry[1+num].origLink;
+    link3 = data.query.results.feed.entry[2+num].origLink;
+    }
+    if(!link1){
+    link1=url;
+    link2=url;
+    link3=url;
+    }
+}
+else{
+
+
+                title = data.query.results.rss.channel.title; 
+                descrip = data.query.results.rss.channel.description; 
+
+                //if(data.query.results.rss.channel.item[0]){
+
+                title1 = data.query.results.rss.channel.item[0+num].title;
+                descrip1 = data.query.results.rss.channel.item[0+num].description; 
+    			var title2 =data.query.results.rss.channel.item[1+num].title;
+                descrip2 =data.query.results.rss.channel.item[1+num].description; 
+               link1 =data.query.results.rss.channel.item[0+num].link;
+                link2 = data.query.results.rss.channel.item[1+num].link;
+
+                if(data.query.results.rss.channel.item[2+num]){
+
+                title3 =data.query.results.rss.channel.item[2+num].title;
+                descrip3 = data.query.results.rss.channel.item[2+num].description;                 
+                link3 = data.query.results.rss.channel.item[2+num].link;
+
+                   } else{ title3=descrip3=link3=" ";}
+                 // } else{ callBack (url); }
+
+
+    if (!descrip1){
+                    descrip1 = data.query.results.rss.channel.item[0+num].encoded; 
+                    descrip2 = data.query.results.rss.channel.item[1+num].encoded; 
+                    descrip3 = data.query.results.rss.channel.item[2+num].encoded; 
+    }
+    if(descrip1){
+        if(descrip1.p){
+    descrip1=descrip1.p[0];
+    descrip2=descrip2.p[0];
+    descrip3=descrip3.p[0];}
+
+if(descrip1.div){
+descrip1=descrip1.div.div.div.p; 
+descrip2=descrip2.div.div.div.p; 
+descrip3=descrip3.div.div.div.p; 
+}
+
+    }
+    if(!descrip1){
+    descrip1 = " ";
+    descrip2 = " ";
+    descrip3 = " ";
+    }
+}
+
+descrip1=strip(descrip1);
+descrip2=strip(descrip2);
+descrip3=strip(descrip3);
+
+
+descrip1=descrip1.slice(0,140);
+descrip2=descrip2.slice(0,140);
+descrip3=descrip3.slice(0,140);
+descrip1+="...";
+descrip2+="...";
+descrip3+="...";
+
+if(descrip){
+if(typeof descrip == 'string'){descrip=descrip.slice(0,120);}
+}
+				return callBack(url, title, descrip, title1, descrip1, title2, descrip2, title3, descrip3, link1, link2, link3); 
+                
+
+
+
+	        }
+    });
+
+}
+
+function citypopup(city){
+    var showpopup = document.getElementById('popup2');
+    showpopup.classList.add('show2');     
+    $("#cityblogs").html("<img src='http://bestanimations.com/Science/Gears/loadinggears/loading-gear.gif'>"); 
+	
+    loadCity(city-1, function(pasteHtml, cityName){
+
+	$("#cityname").html(cityName);
+
+    	document.getElementById("cityblogs").innerHTML = pasteHtml;
+        makeIcon();
+        var col2 = document.getElementsByClassName('cityblogslastPost');
+        
+        for ( var i=0; i < col2.length; i++){
+        var url = col2[i].textContent; 
+		var htmlText; 
+        
+        doAjax(url, col2[i], function(htmlText, col2){
+            $(col2).show();
+            col2.textContent = htmlText; 
+        });
+        }
+    }); 
+}
+
+function loadCity(city, callBack) {
+var data; 
+var pasteHtml = ""; 
+var length;
+var sitename;
+var rss;
+var homepage; 
+var xmlhttp;
+  if (window.XMLHttpRequest) {
+    xmlhttp = new XMLHttpRequest();
+  } else {
+    // code for older browsers
+    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+		var response = this.responseText;
+		data = JSON.parse(response);
+      	length = data[city].blogs.length; 
+        for (var i = 0; i < length; i++){
+
+           homepage = data[city].blogs[i].url;
+           rss = data[city].blogs[i].rss; 
+           sitename = data[city].blogs[i].name; 
+cityName = data[city].city;
+
+pasteHtml += "<div class='col1'> <span class='cityblogsIcon' hidden>" + homepage + "</span> <span class='link' onclick='popup(\"" + rss + "\", \"" + homepage + "\")'>" + sitename + "</span> </div><div class='col3'> <a href='" + homepage + "' target='_blank'> <img src='http://www.planet-9.com/autolinker/images/link2.gif'> </a> </div><div class='col2'><span class='cityblogslastPost' hidden>" + rss + "</span> </div>"; 
+
+        }
+      	return callBack(pasteHtml, cityName); 
+    }
+  };
+  xmlhttp.open("GET", "../cities.json", true);
+  xmlhttp.send();
+}
+
+
+function popup2Close(){
+	    var popup = document.getElementById('popup2');
+        popup.classList.remove('show2'); 
+}
+</script>
+
+<style>
+
+html{font-family:sans-serif;font-size:62.5%}
+
+body{margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.428571429;color:#fff; background-repeat:no-repeat; background-color:#000000;background-position:initial initial!important;background-repeat:initial initial!important}
+
+a{background-color:transparent}
+
+h1{margin:.67em 0; color:#005000; text-align:center}
+
+h1,h3,ul{margin-bottom:10px}
+
+li{margin-left: 5px !important} 
+
+*,::after,::before{box-sizing:border-box}
+
+input{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}
+
+.header-container .container, .main-container{max-width:970px;margin:0 auto}
+.main-container{margin-top:10px;}
+
+h1,h3{font:'Times New Roman',serif;font-weight:900;line-height:1.1;color:inherit;margin-top:20px}
+
+h1{font-size:36px}
+
+h3{font-size:24px}
+
+ul{margin-top:0}
+
+.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}
+
+.col-md-3{position:relative;min-height:1px;padding-left:10px;padding-right:10px}
+
+.top{background-image:none;background-attachment:scroll;background-color:#700030;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#4f4f4f;color:#fff;font-size:16px;padding:5px 0;position:absolute;text-align:center;text-shadow:#000 1px 1px 0;width:100%;background-position:0 0;background-repeat:repeat repeat}
+
+a{text-decoration:none;color:#525252}
+
+.main-container .category-header,.main-container .category-wrapper, .city-wrapper{background-image:none;background-repeat:repeat repeat;background-position:0 0;background-attachment:scroll}
+
+#cookie{
+color:#343434;
+background-color:#e0e0e0;
+font-weight: bold;
+border-style: solid;
+    border-radius: 20px;
+    border-width: 10px;
+border-color:#636363;
+}
+
+#update{
+color:blue;
+background-color:#ADD8E6;
+overflow-x: auto;
+    border-style: solid;
+    border-radius: 25px;
+    border-width: 10px;
+border-color:darkblue;
+
+}
+
+#add{
+background-color:#e0e0e0;
+overflow-x: auto;
+text-align:center;
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 10px;
+border-color:#636363;
+
+}
+
+.col-md-3 .col1 {    float: left;    width: 67%;        margin-left:10px; white-space: nowrap;overflow-x:hidden;overflow-y:hidden;}
+.col-md-3 .col2 {	float:right;    width:17%; font-size:11px;overflow-x:hidden;white-space: nowrap;overflow-y:hidden;}
+.col-md-3 .col3 {	float:right;    width:6%;overflow-x:hidden;white-space: nowrap;overflow-y:hidden;}
+
+span.link {cursor:pointer;}
+#close {cursor:pointer;}
+.city{cursor:pointer;}
+#nextpage{cursor:pointer;}
+
+.main-container .category-container{border:3px solid #006400;margin-bottom:18px;border-radius:10px 10px 0 0}
+
+.main-container .category-header{background-color:#006400;color:#fff;font-family:NexaBold,Helvetica,Arial,sans-serif;height:40px;padding:1px 0;text-align:center;text-transform:uppercase;border-radius:3px 3px 0 0}
+
+.main-container .category-header h3{font-family:NexaBold,Helvetica,Arial,sans-serif;font-size:14px;height:40px;line-height:40px;margin:0;overflow:hidden;position:relative;color:white !important;text-shadow:#000 1px 1px} 
+
+.main-container .category-header h3 a{color:white;text-decoration:none;position:relative}
+
+.main-container .category-wrapper, .city-wrapper, .favourites{background-color:#f3f9f3;color:#006400;overflow-y:auto;padding-top:10px;position:relative}
+
+
+@media (min-width:768px){.container{width:760px}}
+
+@media (min-width:820px){
+.container{width:810px}
+.col-md-3{float:left}
+.col-md-3{width:50%}
+}
+
+@media (min-width:1200px){.container{width:1170px}.col-md-3{width:33%}}
+
+@media (min-width:1001px){.header-container{min-height:219px}}
+
+
+
+@media (max-width:1000px){#search_input,.header-container .container #website_swap{display:none}
+ul li a{font-size:12px}
+.main-container{background-image:none}
+.main-container .category-wrapper, .city-wrapper{overflow-x:hidden}
+.main-container .category-wrapper ul li{margin-bottom:8px;margin-left:-15px}
+.main-container .container{padding:0 0px}
+.header-container .date{bottom:0}}
+}
+
+@media (max-width:768px){
+#main_container,#search_input,.top{display:none}
+.main-container{background-image:none;padding:0 px}
+.main-container .col-md-3{float:none;width:100%;padding-left:0px;padding-right:0px}
+.main-container .category-wrapper ul li{margin-bottom:5px;margin-left:-10px}
+.main-container{top:70px;position:relative}
+.container{padding-left:0px;padding-right:0px}
+}
+
+.description{
+color: #5e5e5e;
+font-style:italic; 
+font-size: 24px; 
+text-align:center;
+
+}
+.entry{
+margin-top: 0px !important; 
+}
+
+/* The actual popup */
+.popuptext {
+    visibility: hidden;
+    width: 550px;
+    background-color: #eFFFFF;
+    text-align: center;
+    border-style: solid;
+    border-radius: 15px 0px 0px 15px;
+    border-width: 10px;
+    border-color: #0D4F8B;
+    padding: 0 0;
+    position: fixed;
+    z-index: 3;
+    top: 15%;
+    right: 0%;
+    height:650px;
+    margin-left: -200px;
+    max-height:650px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.popuptext .popuphead {
+margin-top: -10px;
+padding-top: 7px;
+color: yellow;
+background-color: #0D4F8B;
+
+}
+.popuphead h1 a {
+color: #ee9 !important;
+text-shadow: 2px 2px #882;
+
+}
+.popuphead h3 {
+color: #c8c8c8 !important
+}
+
+.popuphead a {
+color: #fff; 
+}
+
+.popuptext .popupbody{
+color: #7E7E7E;
+margin-top: -7px; 
+padding-top: 4px;
+}
+
+/* The actual popup */
+.citypopup {
+    visibility: hidden;
+    width: 280px;
+    background-color: #FFF;
+    color: #000; 
+    text-align: left;
+    border-style: solid;
+    border-radius: 15px;
+    border-width: 7px;
+    border-color: #2D6FAB;
+    padding: 0 0;
+    position: absolute;
+    z-index: 2;
+    top: 7%;
+    right: 5%;
+    height:420px;
+    margin-left: -200px;
+   max-height:420px; 
+  overflow-x:hidden;
+overflow-y:auto; 
+}
+
+.citypopup h2{
+ text-align:center; 
+}
+
+.swipePopup {
+visibility:hidden;
+width: 280px;
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    padding: 0 0;
+    position: absolute;
+    z-index: 4;
+    top: 0%;
+    right: 0%;
+    height:100%;
+    width: 100%;
+    margin-left: -40px;
+
+  overflow-x:hidden;
+overflow-y:hidden; 
+}
+
+.loading{
+visibility: hidden;
+top:0;
+bottom:0;
+left:0;
+right:0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #000; 
+    text-align: center;
+vertical-align:middle;
+    position: fixed;
+    z-index: 5;
+}
+
+.loadingtext{
+position:fixed;     
+height:100%;
+width:100%;
+padding-top:10%;
+z-index: 6;
+    text-align: center;
+
+}
+
+/* Toggle this class - hide and show the popup */
+.container .show {
+    visibility: visible;
+    -webkit-animation: slideIn 500ms;
+    animation: slideIn 500ms;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes slideIn {
+    from {right: -400px;opacity: 0;} 
+    to {right: 0px;opacity: 1;}
+}
+
+@keyframes slideIn {
+    from {right: -400px;opacity: 0;}
+    to {right: 0px ;opacity: 1;}
+}
+
+.container .show2 {
+    visibility: visible;
+    -webkit-animation: fadeIn 500ms;
+    animation: fadeIn 500ms;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+
+/* Toggle this class - hide and show the popup */
+.container .hide {
+    -webkit-animation: slideOut 700ms;
+    animation: slideOut 700ms;
+    right:-550px;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes slideOut {
+    from {right: 0px;opacity:1;} 
+    to {right: -550px;opacity:0;visibility:hidden;}
+}
+
+@keyframes slideOut {
+    from {right: 0px;opacity:1;}
+    to {right: -550px ;opacity:0;visibility:hidden;}
+}
+
+
+@media (max-width:585px){
+.popuptext {
+top:0%;
+width: 360px;
+    height:600px;
+    border-width:5px
+
+
+}
+}
+
+@media (max-width:360px){
+.popuptext {
+top:0%;    
+width: 320px;
+    height:600px;
+    border-width:5px
+
+}
+}
+
+.before_blog_1 h2{
+color:#5a5a5a; 
+text-shadow:2px 2px #aaaaaa;
+font-size: 40px;
+font-family:"tahoma";
+font-weight:bold;
+padding: 20px 20px 0px 20px;
+text-transform: uppercase;
+
+}
+
+input[type=text] {
+    width: 90%;
+height:90%;
+    box-sizing: border-box;
+    border: 2px solid #006400;
+    border-radius: 4px;
+    font-size: 14px;
+text-align:center; 
+    background-color: white;
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 5px 20px 5px 20px;
+}
+
+</style>  
+
